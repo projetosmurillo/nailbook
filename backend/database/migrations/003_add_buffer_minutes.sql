@@ -17,7 +17,7 @@ END
 $$;
 
 -- Atualizar settings existentes
-UPDATE settings SET buffer_minutes = 15 WHERE buffer_minutes = 0 AND id IS NOT NULL LIMIT 1;
+UPDATE settings SET buffer_minutes = 15 WHERE buffer_minutes = 0 AND id IS NOT NULL;
 
 -- Index para buffer (não necessário individualmente, mas documentado)
 -- O buffer é utilizado na lógica do serviço, não em queries diretas
