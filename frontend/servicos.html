@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serviços — NailBook</title>
+  <meta name="description" content="Explore todos os nossos serviços de manicure e estética. Veja preços e durações.">
+  <meta property="og:title" content="Serviços — NailBook">
+  <meta property="og:description" content="Explore todos os nossos serviços de manicure e estética.">
+  <meta property="og:url" content="https://www.meudominio.pt/servicos">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/public.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar para o conteúdo</a>
+
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <a href="/" class="navbar__brand">NailBook</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <ul class="navbar__nav" id="navbar-nav" role="menubar">
+      <li role="none"><a href="/" role="menuitem">Início</a></li>
+      <li role="none"><a href="/servicos" role="menuitem" class="navbar__nav-a--active">Serviços</a></li>
+      <li role="none"><a href="/" role="menuitem">Sobre</a></li>
+      <li role="none"><a href="/" role="menuitem">Contacto</a></li>
+      <li role="none"><a href="/marcacao" role="menuitem" class="navbar__cta">Marcar</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <section class="section" aria-label="Nossos serviços">
+      <h1 class="section__title">Os Nossos Serviços</h1>
+      <p class="section__subtitle">Escolha o tratamento ideal para si</p>
+      <div class="services-grid" id="services-grid">
+        <div class="loading">
+          <div class="loading__spinner"></div>
+          <p>A carregar serviços...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background: var(--color-primary); color: white; text-align: center; padding: var(--space-xl);">
+    <p style="margin-bottom: var(--space-sm);">NailBook — Todos os direitos reservados</p>
+    <p style="font-size: var(--font-size-sm); opacity: 0.8;">
+      <a href="/privacidade" style="color: white;">Política de Privacidade</a> |
+      <a href="/termos" style="color: white;">Termos de Utilização</a>
+    </p>
+  </footer>
+
+  <script type="module" src="js/public.js"></script>
+  <script type="module">
+    import { initServicesPage } from './js/booking.js';
+    document.addEventListener('DOMContentLoaded', () => initServicesPage());
+  </script>
+</body>
+</html>

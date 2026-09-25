@@ -1,0 +1,86 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*
+!.env.example
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+.docker/
+
+# Dependencies
+node_modules/
+
+# Frontend build
+frontend/.cache/
+frontend/_site/
+frontend/dist/
+frontend/build/
+frontend/.next/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+postgres_data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Testing
+coverage/
+.nyc_output/
+tests/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Docs (keep root docs)
+!.README.md
+!.frontend/README.md
+!.backend/README.md
+!.docs/architecture.md
+!.docs/api.md
+!.docs/deployment.md
+!.docs/production-checklist.md
+
+# Temporary files
+*.cjs
+*.tmp
+*.temp
+project_summary.cjs
+verify_*.cjs
+test_*.cjs
+final_*.cjs
+fix_*.cjs
+update_*.cjs
+
+# Secrets
+*.pem
+*.key
+*.p12
+*.pfx
+*.cert
+
+# Render
+render.yaml
+
+# Temporary
+tmp/

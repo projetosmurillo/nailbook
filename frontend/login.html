@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - NailBook</title>
+  <meta name="description" content="Aceda ao painel administrativo.">
+  <meta property="og:title" content="Login - NailBook">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body class="body--auth">
+  <main class="login" aria-label="Login administrativo">
+    <div class="login__card">
+      <div class="login__header">
+        <h1 class="login__title">NailBook</h1>
+        <p class="login__subtitle">Área Administrativa</p>
+      </div>
+
+      <form class="login__form" id="login-form" novalidate>
+        <div class="form-group">
+          <label for="admin-email" class="form-group__label">Email</label>
+          <input type="email" id="admin-email" class="form-group__input" required aria-required="true" autocomplete="email" placeholder="admin@exemplo.com">
+          <span class="form-group__error" id="error-email" role="alert"></span>
+        </div>
+        <div class="form-group">
+          <label for="admin-password" class="form-group__label">Password</label>
+          <input type="password" id="admin-password" class="form-group__input" required aria-required="true" autocomplete="current-password" placeholder="********">
+          <span class="form-group__error" id="error-password" role="alert"></span>
+        </div>
+        <div class="login__error" id="login-error" role="alert"></div>
+        <button type="submit" class="btn btn--primary btn--block" id="login-btn">
+          Entrar
+        </button>
+      </form>
+
+      <div class="login__footer">
+        <a href="index.html" class="login__link">Voltar ao site</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { apiPost } from './js/api.js';
+    import { showToast } from './js/components.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('login-form');
+      const emailInput = document.getElementById('admin-email');
+      const passwordInput = document.getElementById('admin-password');
+      const errorEl = document.getElementById('login-error');
+
+      // Check if already logged in
+      checkAuth();
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!email || !password) {
+          errorEl.textContent = 'Preencha todos os campos.';
+          return;
+        }
+
+        const btn = document.getElementById('login-btn');
+        btn.disabled = true;
+        btn.textContent = 'A entrar...';
+        errorEl.textContent = '';
+
+        try {
+          const data = await apiPost('/api/admin/auth/login', { email, password });
+          
+          if (data.success) {
+            showToast('Bem-vindo ao Painel Administrativo', 'success');
+            window.location.href = 'dashboard.html';
+          }
+        } catch (err) {
+          errorEl.textContent = err.message || 'Email ou password inválidos.';
+          showToast(err.message || 'Erro no login', 'error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Entrar';
+        }
+      });
+
+      async function checkAuth() {
+        try {
+          const data = await apiPost('/api/admin/auth/me', {});
+          if (data.success) {
+            window.location.href = 'dashboard.html';
+          }
+        } catch {
+          // Not authenticated, show login form
+        }
+      }
+    });
+  </script>
+</body>
+</html>

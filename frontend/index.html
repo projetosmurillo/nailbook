@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manicure & Estética — Marcações Online</title>
+  <meta name="description" content="Reserve já a sua manicure ou tratamento de estética. Agende online de forma fácil e rápida.">
+  <meta property="og:title" content="Manicure & Estética — Marcações Online">
+  <meta property="og:description" content="Reserve já a sua manicure ou tratamento de estética.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.meudominio.pt/">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <meta property="og:locale" content="pt_PT">
+  <meta name="theme-color" content="#2C2C2C">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/public.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar para o conteúdo</a>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <a href="/" class="navbar__brand">NailBook</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <ul class="navbar__nav" id="navbar-nav" role="menubar">
+      <li role="none"><a href="/" role="menuitem" class="navbar__nav-a--active">Início</a></li>
+      <li role="none"><a href="/servicos" role="menuitem">Serviços</a></li>
+      <li role="none"><a href="/" role="menuitem">Sobre</a></li>
+      <li role="none"><a href="/" role="menuitem">Contacto</a></li>
+      <li role="none"><a href="/marcacao" role="menuitem" class="navbar__cta">Marcar</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="hero" aria-label="Bem-vindo">
+      <h1 class="hero__title">Bem-vinda ao NailBook</h1>
+      <p class="hero__subtitle">Experiência de beleza e bem-estar. Marque o seu próximo tratamento com apenas alguns cliques.</p>
+      <a href="/marcacao" class="hero__cta">
+        <span>📅</span> Marcar agora
+      </a>
+    </section>
+
+    <!-- Services -->
+    <section class="section" aria-label="Nossos serviços">
+      <h2 class="section__title">Nossos Serviços</h2>
+      <p class="section__subtitle">Conheça os tratamentos que temos para si</p>
+      <div class="services-grid" id="services-grid">
+        <!-- Loaded from API -->
+        <div class="loading">
+          <div class="loading__spinner"></div>
+          <p>A carregar serviços...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" style="background: var(--color-surface);" aria-label="Como funciona">
+      <h2 class="section__title">Como Funciona</h2>
+      <div class="how-it-works">
+        <div class="how-step">
+          <div class="how-step__number">1</div>
+          <div class="how-step__title">Escolha o Serviço</div>
+          <div class="how-step__desc">Selecione o tratamento que deseja</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step__number">2</div>
+          <div class="how-step__title">Escolha o Horário</div>
+          <div class="how-step__desc">Selecione a data e hora disponíveis</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step__number">3</div>
+          <div class="how-step__title">Confirme</div>
+          <div class="how-step__desc">Preencha os seus dados e confirme</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="section" aria-label="Contactos">
+      <h2 class="section__title">Contactos</h2>
+      <div class="contact-grid" id="contact-grid">
+        <!-- Loaded from API -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background: var(--color-primary); color: white; text-align: center; padding: var(--space-xl);">
+    <p style="margin-bottom: var(--space-sm);">NailBook — Todos os direitos reservados</p>
+    <p style="font-size: var(--font-size-sm); opacity: 0.8;">
+      <a href="/privacidade" style="color: white;">Política de Privacidade</a> |
+      <a href="/termos" style="color: white;">Termos de Utilização</a>
+    </p>
+  </footer>
+
+  <script type="module" src="js/public.js"></script>
+  <script type="module">
+    import { initHomepage } from './js/booking.js';
+    document.addEventListener('DOMContentLoaded', () => initHomepage());
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmação - NailBook</title>
+  <meta name="description" content="A sua marcação foi realizada com sucesso.">
+  <meta property="og:title" content="Confirmação - NailBook">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/booking.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+  <header class="header" role="banner">
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="index.html" class="nav__logo" aria-label="NailBook - Início">
+        <span class="nav__logo-text">NailBook</span>
+      </a>
+      <div class="nav__actions">
+        <a href="index.html" class="nav__link">Início</a>
+        <a href="booking.html" class="nav__link nav__link--primary">Marcar agora</a>
+        <a href="dashboard.html" class="nav__link">Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="confirmation" aria-label="Detalhes da marcação">
+      <div class="container">
+        <div class="confirmation__card">
+          <div class="confirmation__icon" aria-hidden="true">✓</div>
+          <h1 class="confirmation__title">Marcação realizada com sucesso!</h1>
+          
+          <div class="confirmation__details" id="confirmation-details">
+            <!-- Preenchido via URL params ou JS -->
+          </div>
+
+          <div class="confirmation__actions">
+            <a href="booking.html" class="confirmation__btn confirmation__btn--primary">
+              Marcar novamente
+            </a>
+            <button class="confirmation__btn confirmation__btn--secondary" id="btn-add-calendar">
+              Adicionar ao calendário
+            </button>
+            <a href="#" class="confirmation__link" id="cancel-link">
+              Cancelar marcação
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <p class="footer__text">&copy; 2025 NailBook. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js" defer></script>
+  <script src="js/confirmation.js" defer></script>
+</body>
+</html>

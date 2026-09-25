@@ -1,0 +1,19 @@
+# Dependências do frontend
+node_modules/
+
+# Build
+dist/
+build/
+.cache/
+_site/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

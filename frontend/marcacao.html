@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcação — NailBook</title>
+  <meta name="description" content="Marca a sua próxima visita. Escolha o serviço, a data e o horário.">
+  <meta property="og:title" content="Marcação — NailBook">
+  <meta property="og:description" content="Reserve a sua marcação online de forma fácil e rápida.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/public.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar para o conteúdo</a>
+
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <a href="/" class="navbar__brand">NailBook</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <ul class="navbar__nav" id="navbar-nav" role="menubar">
+      <li role="none"><a href="/" role="menuitem">Início</a></li>
+      <li role="none"><a href="/servicos" role="menuitem">Serviços</a></li>
+      <li role="none"><a href="/" role="menuitem">Sobre</a></li>
+      <li role="none"><a href="/" role="menuitem">Contacto</a></li>
+      <li role="none"><a href="/marcacao" role="menuitem" class="navbar__cta">Marcar</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <!-- Booking App -->
+    <div class="booking" id="booking-app">
+      <!-- Step Indicator -->
+      <div class="booking__steps" id="booking-steps" aria-label="Passos da marcação">
+        <div class="booking__step booking__step--active" data-step="1">
+          <span class="booking__step-number">1</span> Serviço
+        </div>
+        <div class="booking__step" data-step="2">
+          <span class="booking__step-number">2</span> Data
+        </div>
+        <div class="booking__step" data-step="3">
+          <span class="booking__step-number">3</span> Horário
+        </div>
+        <div class="booking__step" data-step="4">
+          <span class="booking__step-number">4</span> Dados
+        </div>
+        <div class="booking__step" data-step="5">
+          <span class="booking__step-number">5</span> Confirmar
+        </div>
+      </div>
+
+      <!-- Step 1: Service Selection -->
+      <div id="step-1" class="booking-step-panel">
+        <h2 class="section__title">Escolha o Serviço</h2>
+        <div class="services-grid" id="booking-services">
+          <div class="loading">
+            <div class="loading__spinner"></div>
+            <p>A carregar serviços...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Date Selection -->
+      <div id="step-2" class="booking-step-panel" hidden>
+        <h2 class="section__title">Escolha a Data</h2>
+        <div class="calendar" id="calendar-container">
+          <div class="loading">
+            <div class="loading__spinner"></div>
+            <p>A carregar calendário...</p>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-lg);">
+          <button class="btn btn--secondary" id="btn-back-2">Voltar</button>
+          <button class="btn btn--primary" id="btn-next-2" disabled>Continuar</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Time Selection -->
+      <div id="step-3" class="booking-step-panel" hidden>
+        <h2 class="section__title">Escolha o Horário</h2>
+        <p style="text-align: center; color: var(--color-text-muted); margin-bottom: var(--space-md);" id="selected-date-text"></p>
+        <div class="slots" id="time-slots">
+          <!-- Time slots loaded by JS -->
+        </div>
+        <div id="no-slots-message" style="text-align: center; color: var(--color-text-muted); margin-top: var(--space-lg);" hidden>
+          <p>Não existem horários disponíveis para esta data.</p>
+          <button class="btn btn--secondary" id="btn-change-date">Escolher outra data</button>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-lg);">
+          <button class="btn btn--secondary" id="btn-back-3">Voltar</button>
+          <button class="btn btn--primary" id="btn-next-3" disabled>Continuar</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Customer Data -->
+      <div id="step-4" class="booking-step-panel" hidden>
+        <h2 class="section__title">Os seus dados</h2>
+        <form id="customer-form" novalidate>
+          <div class="form-group">
+            <label class="form-group__label form-group__label--required" for="customer-name">Nome *</label>
+            <input type="text" class="form-group__input" id="customer-name" placeholder="O seu nome" required maxlength="100" autocomplete="name">
+            <div class="form-group__error" id="error-name"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-group__label form-group__label--required" for="customer-phone">Telefone *</label>
+            <input type="tel" class="form-group__input" id="customer-phone" placeholder="+351 912 345 678" required maxlength="20" autocomplete="tel">
+            <div class="form-group__error" id="error-phone"></div>
+            <div class="form-group__hint">Formato: +351 912 345 678</div>
+          </div>
+          <div class="form-group">
+            <label class="form-group__label" for="customer-email">Email (opcional)</label>
+            <input type="email" class="form-group__input" id="customer-email" placeholder="seu@email.com" autocomplete="email">
+            <div class="form-group__error" id="error-email"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-group__label" for="customer-notes">Observações</label>
+            <textarea class="form-group__input" id="customer-notes" placeholder="Ex: Tenho uma unha partida..." maxlength="500"></textarea>
+            <div class="form-group__error" id="error-notes"></div>
+          </div>
+          <div style="text-align: center; margin-top: var(--space-lg);">
+            <button type="button" class="btn btn--secondary" id="btn-back-4">Voltar</button>
+            <button type="submit" class="btn btn--primary" id="btn-confirm" disabled>Confirmar marcação</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 5: Summary & Confirm -->
+      <div id="step-5" class="booking-step-panel" hidden>
+        <h2 class="section__title">Confirme a sua marcação</h2>
+        <div class="summary" id="booking-summary">
+          <!-- Summary loaded by JS -->
+        </div>
+        <div id="conflict-banner" class="conflict-banner" hidden>
+          <p class="conflict-banner__text">⚠️ Este horário acabou de ser reservado. Por favor, escolha outro.</p>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-lg); display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn--secondary" id="btn-back-5">Voltar</button>
+          <button class="btn btn--primary btn--lg" id="btn-create" disabled>Confirmar marcação</button>
+        </div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div id="booking-loading" class="loading" hidden>
+        <div class="loading__spinner"></div>
+        <p>A confirmar a sua marcação...</p>
+      </div>
+    </div>
+
+    <!-- Management Container (for token-based page) -->
+    <div id="management-app" hidden>
+      <div class="management" id="management-container"></div>
+    </div>
+  </main>
+
+  <footer style="background: var(--color-primary); color: white; text-align: center; padding: var(--space-xl);">
+    <p style="margin-bottom: var(--space-sm);">NailBook — Todos os direitos reservados</p>
+    <p style="font-size: var(--font-size-sm); opacity: 0.8;">
+      <a href="/privacidade" style="color: white;">Política de Privacidade</a> |
+      <a href="/termos" style="color: white;">Termos de Utilização</a>
+    </p>
+  </footer>
+
+  <script type="module" src="js/public.js"></script>
+  <script type="module">
+    import { initBookingFlow } from './js/booking.js';
+    document.addEventListener('DOMContentLoaded', () => initBookingFlow());
+  </script>
+</body>
+</html>

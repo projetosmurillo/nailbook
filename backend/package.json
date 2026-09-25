@@ -1,0 +1,40 @@
+{
+  "name": "nailbook-backend",
+  "version": "1.0.0",
+  "description": "Backend API para plataforma de marcações online - NailBook",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "migrate": "node database/migrate.js",
+    "seed": "node database/seed.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --forceExit",
+    "test:watch": "npm run test -- --watch"
+  },
+  "dependencies": {
+    "argon2": "^0.41.1",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "helmet": "^7.1.0",
+    "pg": "^8.13.0",
+    "express-rate-limit": "^7.4.1",
+    "cors": "^2.8.5",
+    "joi": "^17.13.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^10.0.0",
+    "winston": "^3.14.0",
+    "express-validator": "^7.2.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["nailbook", "appointments", "booking", "nail-care"],
+  "license": "All rights reserved"
+}

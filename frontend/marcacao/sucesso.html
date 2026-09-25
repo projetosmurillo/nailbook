@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcação Confirmada — NailBook</title>
+  <meta name="description" content="A sua marcação foi confirmada com sucesso.">
+  <meta property="og:title" content="Marcação Confirmada — NailBook">
+  <meta property="og:description" content="A sua marcação foi confirmada com sucesso.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/public.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar para o conteúdo</a>
+
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <a href="/" class="navbar__brand">NailBook</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <ul class="navbar__nav" id="navbar-nav" role="menubar">
+      <li role="none"><a href="/" role="menuitem">Início</a></li>
+      <li role="none"><a href="/servicos" role="menuitem">Serviços</a></li>
+      <li role="none"><a href="/" role="menuitem">Sobre</a></li>
+      <li role="none"><a href="/" role="menuitem">Contacto</a></li>
+      <li role="none"><a href="/marcacao" role="menuitem" class="navbar__cta">Marcar</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <div class="success">
+      <div class="success__icon" aria-hidden="true">✓</div>
+      <h1 class="success__title">Marcação Confirmada!</h1>
+      <p style="color: var(--color-text-muted); margin-bottom: var(--space-xl);">A sua marcação foi criada com sucesso.</p>
+
+      <div class="success__details" id="success-details">
+        <!-- Loaded from API -->
+        <div class="loading">
+          <div class="loading__spinner"></div>
+          <p>A carregar detalhes...</p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; margin-top: var(--space-xl);">
+        <a href="/marcacao" class="btn btn--secondary">Nova Marcação</a>
+        <a href="/" class="btn btn--primary">Voltar ao Início</a>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: var(--color-primary); color: white; text-align: center; padding: var(--space-xl);">
+    <p style="margin-bottom: var(--space-sm);">NailBook — Todos os direitos reservados</p>
+    <p style="font-size: var(--font-size-sm); opacity: 0.8;">
+      <a href="/privacidade" style="color: white;">Política de Privacidade</a> |
+      <a href="/termos" style="color: white;">Termos de Utilização</a>
+    </p>
+  </footer>
+
+  <script type="module" src="../js/public.js"></script>
+  <script type="module">
+    import { initSuccessPage } from '../js/booking.js';
+    document.addEventListener('DOMContentLoaded', () => initSuccessPage());
+  </script>
+</body>
+</html>
