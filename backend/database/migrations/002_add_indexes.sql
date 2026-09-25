@@ -1,79 +1,88 @@
 -- ============================================
--- NAILBOOK — Migração 002: Índices Adicionais
--- e Constraints de Performance
+-- NAILBOOK — Migração 002: Índices Simples
 -- ============================================
--- Este ficheiro contém índices e constraints
--- que não podem ser criados na migração 001
--- porque dependem de tabelas existentes.
---
--- Execute após a 001_create_tables.sql.
+-- Índices B-tree simples sem expressões com funções.
+-- Índices com funções (LOWER, DATE, EXCLUDE) serão
+-- adicionados numa migração posterior após
+-- confirmação de compatibilidade com a versão do PostgreSQL.
 
 -- ============================================
 -- Índices para Consultas Comuns
 -- ============================================
 
--- Appointments: Consulta por data e estado (dashboard)
-CREATE INDEX idx_appointments_date_status
-    ON appointments((start_at::date), status);
+-- Appointments: Lookup por ID
+CREATE INDEX idx_appointments_service_id
+    ON appointments(service_id);
 
--- Appointments: Consulta por cliente e data (histórico)
-CREATE INDEX idx_appointments_customer_date
-    ON appointments(customer_id, (start_at::date));
+-- Appointments: Lookup por customer_id
+CREATE INDEX idx_appointments_customer_id
+    ON appointments(customer_id);
 
--- Appointments: Consulta por serviço e data (disponibilidade)
-CREATE INDEX idx_appointments_service_date
-    ON appointments(service_id, (start_at::date), status);
+-- Appointments: Lookup por status
+CREATE INDEX idx_appointments_status
+    ON appointments(status);
 
--- Appointments: Consulta futura (dashboard)
-CREATE INDEX idx_appointments_future
-    ON appointments(start_at) WHERE status = 'confirmed';
+-- Appointments: Lookup por start_at (consulta por data futura)
+CREATE INDEX idx_appointments_start_at
+    ON appointments(start_at);
 
--- Customers: Busca por email (case-insensitive)
-CREATE INDEX idx_customers_email_lower
-    ON customers(LOWER(email)) WHERE email IS NOT NULL;
+-- Customers: Lookup por email (exact match)
+CREATE INDEX idx_customers_email
+    ON customers(email);
 
--- Customers: Busca por telefone (case-insensitive)
-CREATE INDEX idx_customers_phone_lower
-    ON customers(LOWER(phone));
+-- Customers: Lookup por phone (exact match)
+CREATE INDEX idx_customers_phone
+    ON customers(phone);
 
--- Booking Tokens: Lookup rápido por appointment_id com expiração
-CREATE INDEX idx_booking_tokens_lookup
-    ON booking_tokens(appointment_id, expires_at);
+-- Booking Tokens: Lookup por appointment_id
+CREATE INDEX idx_booking_tokens_appointment_id
+    ON booking_tokens(appointment_id);
 
--- Notification Logs: Busca por appointment e tipo (auditoria)
-CREATE INDEX idx_notification_logs_appointment_type
-    ON notification_logs(appointment_id, type);
+-- Booking Tokens: Lookup por expires_at
+CREATE INDEX idx_booking_tokens_expires_at
+    ON booking_tokens(expires_at);
 
--- Blocked Periods: Busca por data (disponibilidade)
-CREATE INDEX idx_blocked_periods_lookup
-    ON blocked_periods USING gist (tstzrange(starts_at, ends_at));
+-- Notification Logs: Lookup por appointment_id
+CREATE INDEX idx_notification_logs_appointment_id
+    ON notification_logs(appointment_id);
 
--- Business Hours: Lookup por dia e ordem
-CREATE INDEX idx_business_hours_lookup
-    ON business_hours(day_of_week, active, opens_at);
+-- Notification Logs: Lookup por type
+CREATE INDEX idx_notification_logs_type
+    ON notification_logs(type);
 
--- Breaks: Lookup por dia e ordem
-CREATE INDEX idx_breaks_lookup
-    ON breaks(day_of_week, active, starts_at);
+-- Blocked Periods: Lookup por starts_at
+CREATE INDEX idx_blocked_periods_starts_at
+    ON blocked_periods(starts_at);
+
+-- Blocked Periods: Lookup por ends_at
+CREATE INDEX idx_blocked_periods_ends_at
+    ON blocked_periods(ends_at);
+
+-- Business Hours: Lookup por day_of_week
+CREATE INDEX idx_business_hours_day_of_week
+    ON business_hours(day_of_week);
+
+-- Breaks: Lookup por day_of_week
+CREATE INDEX idx_breaks_day_of_week
+    ON breaks(day_of_week);
 
 -- ============================================
 -- Índices para Otimização de Dashboard
 -- ============================================
 
--- Contagem rápida de marcações por estado e data
-CREATE INDEX idx_appointments_dashboard
-    ON appointments(status, (start_at::date));
+-- Contagem rápida de marcações por estado
+CREATE INDEX idx_appointments_status_only
+    ON appointments(status);
 
 -- Revenue por período (métricas)
 CREATE INDEX idx_appointments_revenue
     ON appointments(status, price) WHERE status = 'completed';
 
 -- ============================================
--- Constraints Adicionais de Integridade
+-- Constraints e Triggers (separados da lógica de índices)
 -- ============================================
 
 -- Appointments: Não pode haver marcação para o passado
--- (executado como trigger, não como constraint simples)
 CREATE OR REPLACE FUNCTION check_appointment_not_in_past()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -88,33 +97,11 @@ CREATE TRIGGER trg_appointments_not_past
     BEFORE INSERT OR UPDATE ON appointments
     FOR EACH ROW EXECUTE FUNCTION check_appointment_not_in_past();
 
--- Business Hours: Periodos não podem sobrepor-se no mesmo dia
--- (usando EXCLUDE para garantir que não há sobreposição)
-ALTER TABLE business_hours ADD CONSTRAINT business_hours_no_overlap
-EXCLUDE USING gist (
-    day_of_week WITH =,
-    tstzrange(
-        (day_of_week || ' ' || opens_at)::timestamptz,
-        (day_of_week || ' ' || closes_at)::timestamptz
-    ) WITH &&
-);
-
--- Breaks: Não podem sobrepor-se com pausas no mesmo dia
-ALTER TABLE breaks ADD CONSTRAINT breaks_no_overlap
-EXCLUDE USING gist (
-    day_of_week WITH =,
-    tstzrange(
-        (day_of_week || ' ' || starts_at)::timestamptz,
-        (day_of_week || ' ' || ends_at)::timestamptz
-    ) WITH &&
-);
-
 -- ============================================
 -- Funções Úteis
 -- ============================================
 
 -- Função: Converter hora local para timestamptz UTC
--- Usada no backend para cálculos de disponibilidade
 CREATE OR REPLACE FUNCTION local_time_to_utc(
     p_date DATE,
     p_time TIME,
