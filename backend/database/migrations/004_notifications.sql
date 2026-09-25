@@ -98,7 +98,7 @@ CREATE INDEX IF NOT EXISTS idx_notification_logs_pending
 
 CREATE INDEX IF NOT EXISTS idx_notification_logs_scheduled
     ON notification_logs(scheduled_for)
-    WHERE status = 'pending' AND scheduled_for <= NOW();
+    WHERE status = 'pending';
 
 CREATE INDEX IF NOT EXISTS idx_notification_logs_idempotency
     ON notification_logs(idempotency_key)
@@ -106,7 +106,7 @@ CREATE INDEX IF NOT EXISTS idx_notification_logs_idempotency
 
 CREATE INDEX IF NOT EXISTS idx_notification_logs_next_retry
     ON notification_logs(next_retry_at)
-    WHERE status = 'failed' AND next_retry_at <= NOW();
+    WHERE status = 'failed';
 
 -- ============================================
 -- ADD SCHEDULED_FOR NOT NULL CONSTRAINT
