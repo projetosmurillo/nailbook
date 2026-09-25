@@ -12,6 +12,9 @@
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Adicionar 'processing' ao enum notification_status
+ALTER TYPE notification_status ADD VALUE IF NOT EXISTS 'processing';
+
 -- ============================================
 -- ALTER TABLE notification_logs
 -- ============================================
