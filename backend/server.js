@@ -14,6 +14,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { pool } from './config/database.js';
+import { AdminUser } from './models/index.js';
+import bcrypt from 'bcrypt';
 import { router as apiRouter } from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { generalLimiter as rateLimiter } from './middleware/rateLimiter.js';
@@ -120,11 +122,35 @@ app.use('/api', apiRouter);
 app.use(errorHandler);
 
 // ============================================
+// ENSURE ADMIN USER
+// ============================================
+
+async function ensureAdmin() {
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@nailbook.pt';
+  const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || 'PasswordSegura123!';
+  const adminName = process.env.ADMIN_NAME || 'Admin';
+
+  try {
+    const existing = await AdminUser.findByEmail(adminEmail);
+    if (!existing) {
+      const hash = await bcrypt.hash(adminPassword, 12);
+      await AdminUser.create({ email: adminEmail, passwordHash: hash, name: adminName, role: 'admin' });
+      logger.info(`Default admin created: ${adminEmail}`);
+    } else {
+      logger.info(`Admin already exists: ${adminEmail}`);
+    }
+  } catch (err) {
+    logger.warn('Could not ensure admin user:', err.message);
+  }
+}
+
+// ============================================
 // START SERVER
 // ============================================
 
 async function startServer() {
   try {
+    await ensureAdmin();
     const client = await pool.query('SELECT NOW()');
     logger.info(`Database connected: ${client.rows[0].now}`);
     logger.info(`Migration status: Check schema_migrations table`);
