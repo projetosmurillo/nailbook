@@ -651,3 +651,5 @@ export const BookingToken = {
 // ============================================
 
 import { NotificationLog as NotificationLogModel } from './notificationLog.js';
+
+export { NotificationLogModel as NotificationLog };
