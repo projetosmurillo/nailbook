@@ -49,7 +49,7 @@ export const AdminUser = {
        VALUES ($1, $2, $3, $4, $5, true, $6, $7)
        RETURNING id, email, name, role, active, created_at, updated_at`,
       [uuid(), email, passwordHash, name, role, toPgTimestamp(now()), toPgTimestamp(now()),
-          data.businessUrl || '', data.adminNotificationEmail || null]
+          ]
     );
     return result.rows[0];
   },
@@ -123,7 +123,7 @@ export const Customer = {
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING id, name, phone, email, notes, created_at, updated_at`,
       [uuid(), name, phone, email || null, notes || null, toPgTimestamp(now()), toPgTimestamp(now()),
-          data.businessUrl || '', data.adminNotificationEmail || null]
+          ]
     );
     return result.rows[0];
   },
@@ -207,7 +207,7 @@ export const Service = {
        VALUES ($1, $2, $3, $4, $5, true, $6, $7)
        RETURNING *`,
       [uuid(), name, description || null, price, duration_minutes, toPgTimestamp(now()), toPgTimestamp(now()),
-          data.businessUrl || '', data.adminNotificationEmail || null]
+          ]
     );
     return result.rows[0];
   },
@@ -260,7 +260,7 @@ export const Appointment = {
        VALUES ($1, $2, $3, 'confirmed', $4, $5, $6, $7, $8, $9, $10)
        RETURNING *`,
       [uuid(), customerId, serviceId, toPgTimestamp(startAt), toPgTimestamp(endAt), price, durationSnapshotMinutes, customerNotes || null, toPgTimestamp(now()), toPgTimestamp(now()),
-          data.businessUrl || '', data.adminNotificationEmail || null]
+          ]
     );
     return result.rows[0];
   },
@@ -585,7 +585,7 @@ export const Setting = {
          data.minimumAdvanceHours ?? 0, data.maximumBookingDays ?? 30, data.cancellationDeadlineHours ?? 24,
          data.minIntervalMinutes ?? 0, data.buffer_minutes ?? 0, data.currency || 'EUR', false, null,
          false, true, true, true, toPgTimestamp(now()), toPgTimestamp(now()),
-          data.businessUrl || '', data.adminNotificationEmail || null]
+          ]
       );
       return result.rows[0];
     }
