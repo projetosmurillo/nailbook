@@ -1,88 +1,44 @@
 -- ============================================
--- NAILBOOK — Migração 002: Índices Simples
+-- NAILBOOK — Migração 002: Constraints, Triggers
+-- e Funções Úteis
 -- ============================================
--- Índices B-tree simples sem expressões com funções.
--- Índices com funções (LOWER, DATE, EXCLUDE) serão
--- adicionados numa migração posterior após
--- confirmação de compatibilidade com a versão do PostgreSQL.
-
--- ============================================
--- Índices para Consultas Comuns
--- ============================================
-
--- Appointments: Lookup por ID
-CREATE INDEX idx_appointments_service_id
-    ON appointments(service_id);
-
--- Appointments: Lookup por customer_id
-CREATE INDEX idx_appointments_customer_id
-    ON appointments(customer_id);
-
--- Appointments: Lookup por status
-CREATE INDEX idx_appointments_status
-    ON appointments(status);
-
--- Appointments: Lookup por start_at (consulta por data futura)
-CREATE INDEX idx_appointments_start_at
-    ON appointments(start_at);
-
--- Customers: Lookup por email (exact match)
-CREATE INDEX idx_customers_email
-    ON customers(email);
-
--- Customers: Lookup por phone (exact match)
-CREATE INDEX idx_customers_phone
-    ON customers(phone);
-
--- Booking Tokens: Lookup por appointment_id
-CREATE INDEX idx_booking_tokens_appointment_id
-    ON booking_tokens(appointment_id);
-
--- Booking Tokens: Lookup por expires_at
-CREATE INDEX idx_booking_tokens_expires_at
-    ON booking_tokens(expires_at);
-
--- Notification Logs: Lookup por appointment_id
-CREATE INDEX idx_notification_logs_appointment_id
-    ON notification_logs(appointment_id);
-
--- Notification Logs: Lookup por type
-CREATE INDEX idx_notification_logs_type
-    ON notification_logs(type);
-
--- Blocked Periods: Lookup por starts_at
-CREATE INDEX idx_blocked_periods_starts_at
-    ON blocked_periods(starts_at);
-
--- Blocked Periods: Lookup por ends_at
-CREATE INDEX idx_blocked_periods_ends_at
-    ON blocked_periods(ends_at);
-
--- Business Hours: Lookup por day_of_week
-CREATE INDEX idx_business_hours_day_of_week
-    ON business_hours(day_of_week);
-
--- Breaks: Lookup por day_of_week
-CREATE INDEX idx_breaks_day_of_week
-    ON breaks(day_of_week);
+-- NOTA: A maioria dos índices já está criada na
+-- migração 001_create_tables.sql. Esta migração
+-- contém apenas:
+--   - EXCLUDE constraints (sobreposição)
+--   - Triggers de validação
+--   - Funções PL/pgSQL úteis
+-- Índices com funções (DATE, LOWER) serão
+-- adicionados numa migração posterior.
 
 -- ============================================
--- Índices para Otimização de Dashboard
+-- Constraints de Sobreposição (Business Hours)
 -- ============================================
 
--- Contagem rápida de marcações por estado
-CREATE INDEX idx_appointments_status_only
-    ON appointments(status);
+-- Business Hours: Periodos não podem sobrepor-se no mesmo dia
+ALTER TABLE business_hours ADD CONSTRAINT business_hours_no_overlap
+EXCLUDE USING gist (
+    day_of_week WITH =,
+    tstzrange(
+        (day_of_week || ' ' || opens_at)::timestamptz,
+        (day_of_week || ' ' || closes_at)::timestamptz
+    ) WITH &&
+);
 
--- Revenue por período (métricas)
-CREATE INDEX idx_appointments_revenue
-    ON appointments(status, price) WHERE status = 'completed';
+-- Breaks: Não podem sobrepor-se com pausas no mesmo dia
+ALTER TABLE breaks ADD CONSTRAINT breaks_no_overlap
+EXCLUDE USING gist (
+    day_of_week WITH =,
+    tstzrange(
+        (day_of_week || ' ' || starts_at)::timestamptz,
+        (day_of_week || ' ' || ends_at)::timestamptz
+    ) WITH &&
+);
 
 -- ============================================
--- Constraints e Triggers (separados da lógica de índices)
+-- Trigger: Appointments não podem ser no passado
 -- ============================================
 
--- Appointments: Não pode haver marcação para o passado
 CREATE OR REPLACE FUNCTION check_appointment_not_in_past()
 RETURNS TRIGGER AS $$
 BEGIN
