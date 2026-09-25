@@ -231,10 +231,18 @@ export function isValidLocalTime(dateStr, timeStr, timezone = LISBON_TIMEZONE) {
   const date = new Date(dateStr + 'T' + timeStr + ':00');
   try {
     const localTime = utcToLocalTime(date, timezone);
-    return localTime === timeStr || true; // Aceitar se a conversão funcionar
+    return localTime === timeStr || true;
   } catch {
     return false;
   }
+}
+
+/**
+ * Converter data para timestamp ISO UTC (string)
+ * Usado nos queries SQL para timestamps consistentes
+ */
+export function toPgTimestamp(date) {
+  return date instanceof Date ? date.toISOString() : new Date(date).toISOString();
 }
 
 export { LISBON_TIMEZONE };
