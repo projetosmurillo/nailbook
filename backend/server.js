@@ -133,14 +133,21 @@ async function ensureAdmin() {
   try {
     const existing = await AdminUser.findByEmail(adminEmail);
     if (!existing) {
-      const hash = await bcrypt.hash(adminPassword, 12);
+      let hash;
+      try {
+        hash = await bcrypt.hash(adminPassword, 12);
+      } catch (bcryptErr) {
+        logger.error('bcrypt.hash failed:', bcryptErr.message || bcryptErr);
+        throw bcryptErr;
+      }
       await AdminUser.create({ email: adminEmail, passwordHash: hash, name: adminName, role: 'admin' });
       logger.info(`Default admin created: ${adminEmail}`);
     } else {
       logger.info(`Admin already exists: ${adminEmail}`);
     }
   } catch (err) {
-    logger.warn('Could not ensure admin user:', err.message);
+    logger.warn('Could not ensure admin user:', err.message || err);
+    console.error('ensureAdmin full error:', err);
   }
 }
 
