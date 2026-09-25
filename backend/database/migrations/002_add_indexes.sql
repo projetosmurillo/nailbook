@@ -1,39 +1,14 @@
 -- ============================================
--- NAILBOOK — Migração 002: Constraints, Triggers
--- e Funções Úteis
+-- NAILBOOK — Migração 002: Triggers e Funções
 -- ============================================
--- NOTA: A maioria dos índices já está criada na
--- migração 001_create_tables.sql. Esta migração
--- contém apenas:
---   - EXCLUDE constraints (sobreposição)
+-- Esta migração contém apenas:
 --   - Triggers de validação
 --   - Funções PL/pgSQL úteis
--- Índices com funções (DATE, LOWER) serão
--- adicionados numa migração posterior.
-
--- ============================================
--- Constraints de Sobreposição (Business Hours)
--- ============================================
-
--- Business Hours: Periodos não podem sobrepor-se no mesmo dia
-ALTER TABLE business_hours ADD CONSTRAINT business_hours_no_overlap
-EXCLUDE USING gist (
-    day_of_week WITH =,
-    tstzrange(
-        (day_of_week || ' ' || opens_at)::timestamptz,
-        (day_of_week || ' ' || closes_at)::timestamptz
-    ) WITH &&
-);
-
--- Breaks: Não podem sobrepor-se com pausas no mesmo dia
-ALTER TABLE breaks ADD CONSTRAINT breaks_no_overlap
-EXCLUDE USING gist (
-    day_of_week WITH =,
-    tstzrange(
-        (day_of_week || ' ' || starts_at)::timestamptz,
-        (day_of_week || ' ' || ends_at)::timestamptz
-    ) WITH &&
-);
+--
+-- EXCLUDE constraints (sobreposição de business_hours/breaks)
+-- serão adicionados numa migração posterior após
+-- confirmação de compatibilidade com o PostgreSQL do Render.
+-- Os dados serão protegidos por validação na aplicação.
 
 -- ============================================
 -- Trigger: Appointments não podem ser no passado
