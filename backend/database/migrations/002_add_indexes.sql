@@ -14,15 +14,15 @@
 
 -- Appointments: Consulta por data e estado (dashboard)
 CREATE INDEX idx_appointments_date_status
-    ON appointments(DATE(start_at), status);
+    ON appointments((start_at::date), status);
 
 -- Appointments: Consulta por cliente e data (histórico)
 CREATE INDEX idx_appointments_customer_date
-    ON appointments(customer_id, DATE(start_at));
+    ON appointments(customer_id, (start_at::date));
 
 -- Appointments: Consulta por serviço e data (disponibilidade)
 CREATE INDEX idx_appointments_service_date
-    ON appointments(service_id, DATE(start_at), status);
+    ON appointments(service_id, (start_at::date), status);
 
 -- Appointments: Consulta futura (dashboard)
 CREATE INDEX idx_appointments_future
@@ -62,7 +62,7 @@ CREATE INDEX idx_breaks_lookup
 
 -- Contagem rápida de marcações por estado e data
 CREATE INDEX idx_appointments_dashboard
-    ON appointments(status, DATE(start_at));
+    ON appointments(status, (start_at::date));
 
 -- Revenue por período (métricas)
 CREATE INDEX idx_appointments_revenue
