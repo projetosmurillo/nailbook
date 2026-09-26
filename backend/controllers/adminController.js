@@ -24,9 +24,11 @@ import { pool } from '../config/database.js';
 async function adminLogin(req, res, next) {
   try {
     const { email, password } = req.body;
+    console.log('Login attempt:', email, '|| pw:', password ? 'yes' : 'no');
 
     // 1. Procurar utilizador
     const admin = await AdminUser.findByEmail(email);
+    console.log('Admin found:', !!admin, '|| active:', admin?.active);
     if (!admin) {
       return res.status(401).json({ error: 'Email ou password inválidos' });
     }
@@ -37,6 +39,7 @@ async function adminLogin(req, res, next) {
 
     // 2. Verificar password
     const validPassword = await bcrypt.compare(password, admin.password_hash);
+    console.log('Password valid:', validPassword);
     if (!validPassword) {
       return res.status(401).json({ error: 'Email ou password inválidos' });
     }
