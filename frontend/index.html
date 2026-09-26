@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/public.css">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -25,14 +26,18 @@
 
   <!-- Navigation -->
   <nav class="navbar" role="navigation" aria-label="Navegação principal">
-    <a href="/" class="navbar__brand">NailBook</a>
-    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <a href="/" class="navbar__brand">
+      <i class="fas fa-spa"></i> NailBook
+    </a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
     <ul class="navbar__nav" id="navbar-nav" role="menubar">
-      <li role="none"><a href="/" role="menuitem" class="navbar__nav-a--active">Início</a></li>
-      <li role="none"><a href="/servicos" role="menuitem">Serviços</a></li>
-      <li role="none"><a href="/" role="menuitem">Sobre</a></li>
-      <li role="none"><a href="/" role="menuitem">Contacto</a></li>
-      <li role="none"><a href="/marcacao" role="menuitem" class="navbar__cta">Marcar</a></li>
+      <li role="none"><a href="/" role="menuitem" class="navbar__nav-a--active"><i class="fas fa-home"></i> Início</a></li>
+      <li role="none"><a href="/servicos" role="menuitem"><i class="fas fa-cut"></i> Serviços</a></li>
+      <li role="none"><a href="/" role="menuitem"><i class="fas fa-info-circle"></i> Sobre</a></li>
+      <li role="none"><a href="/" role="menuitem"><i class="fas fa-phone"></i> Contacto</a></li>
+      <li role="none"><a href="/marcacao" role="menuitem" class="navbar__cta"><i class="fas fa-calendar-check"></i> Marcar</a></li>
     </ul>
   </nav>
 
@@ -40,69 +45,226 @@
   <main id="main-content">
     <!-- Hero -->
     <section class="hero" aria-label="Bem-vindo">
-      <h1 class="hero__title">Bem-vinda ao NailBook</h1>
-      <p class="hero__subtitle">Experiência de beleza e bem-estar. Marque o seu próximo tratamento com apenas alguns cliques.</p>
-      <a href="/marcacao" class="hero__cta">
-        <span>📅</span> Marcar agora
-      </a>
+      <div class="hero__decoration">
+        <div class="hero__circle hero__circle--1"></div>
+        <div class="hero__circle hero__circle--2"></div>
+        <div class="hero__circle hero__circle--3"></div>
+      </div>
+      <div class="hero__content">
+        <div class="hero__badge">
+          <i class="fas fa-star"></i> Bem-vinda ao mundo da beleza
+        </div>
+        <h1 class="hero__title">NailBook</h1>
+        <p class="hero__subtitle">Experiência de beleza e bem-estar. Marque o seu próximo tratamento com apenas alguns cliques, no conforto da sua casa.</p>
+        <div class="hero__actions">
+          <a href="/marcacao" class="hero__cta hero__cta--primary">
+            <i class="fas fa-calendar-check"></i> Marcar agora
+          </a>
+          <a href="/servicos" class="hero__cta hero__cta--secondary">
+            <i class="fas fa-info-circle"></i> Conheça os serviços
+          </a>
+        </div>
+        <div class="hero__trust">
+          <p>Já somos <strong>+500</strong> clientes felizes</p>
+          <div class="hero__stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__image-placeholder">
+          <i class="fas fa-spa"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Strip -->
+    <section class="features" aria-label="Porquê escolher-nos">
+      <div class="container">
+        <div class="features__grid">
+          <div class="feature">
+            <div class="feature__icon"><i class="fas fa-user-shield"></i></div>
+            <h3>Profissionais Certificadas</h3>
+            <p>Técnicas experientes e certificadas em estética e manicure</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon"><i class="fas fa-mobile-alt"></i></div>
+            <h3>Agenda Online</h3>
+            <p>Marque o seu horário em segundos, de qualquer dispositivo</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Segurança Total</h3>
+            <p>Os seus dados estão protegidos com criptografia SSL</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon"><i class="fas fa-concierge-bell"></i></div>
+            <h3>Atendimento Exclusivo</h3>
+            <p>Suporte dedicado para cada agendamento</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Services -->
     <section class="section" aria-label="Nossos serviços">
-      <h2 class="section__title">Nossos Serviços</h2>
-      <p class="section__subtitle">Conheça os tratamentos que temos para si</p>
-      <div class="services-grid" id="services-grid">
-        <!-- Loaded from API -->
-        <div class="loading">
-          <div class="loading__spinner"></div>
-          <p>A carregar serviços...</p>
+      <div class="container">
+        <h2 class="section__title">Nossos Serviços</h2>
+        <p class="section__subtitle">Conheça os tratamentos que temos para si</p>
+        <div class="services-grid" id="services-grid">
+          <div class="loading">
+            <div class="loading__spinner"></div>
+            <p>A carregar serviços...</p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- How It Works -->
-    <section class="section" style="background: var(--color-surface);" aria-label="Como funciona">
-      <h2 class="section__title">Como Funciona</h2>
-      <div class="how-it-works">
-        <div class="how-step">
-          <div class="how-step__number">1</div>
-          <div class="how-step__title">Escolha o Serviço</div>
-          <div class="how-step__desc">Selecione o tratamento que deseja</div>
-        </div>
-        <div class="how-step">
-          <div class="how-step__number">2</div>
-          <div class="how-step__title">Escolha o Horário</div>
-          <div class="how-step__desc">Selecione a data e hora disponíveis</div>
-        </div>
-        <div class="how-step">
-          <div class="how-step__number">3</div>
-          <div class="how-step__title">Confirme</div>
-          <div class="how-step__desc">Preencha os seus dados e confirme</div>
+    <section class="section how-it-works-section" aria-label="Como funciona" style="background: var(--color-surface);">
+      <div class="container">
+        <h2 class="section__title">Como Funciona</h2>
+        <div class="how-it-works">
+          <div class="how-step">
+            <div class="how-step__icon"><i class="fas fa-search"></i></div>
+            <div class="how-step__number">1</div>
+            <div class="how-step__title">Escolha o Serviço</div>
+            <div class="how-step__desc">Selecione o tratamento que deseja entre os nossos serviços disponíveis</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step__icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="how-step__number">2</div>
+            <div class="how-step__title">Escolha o Horário</div>
+            <div class="how-step__desc">Selecione a data e hora disponíveis no nosso calendário</div>
+          </div>
+          <div class="how-step">
+            <div class="how-step__icon"><i class="fas fa-check-circle"></i></div>
+            <div class="how-step__number">3</div>
+            <div class="how-step__title">Confirme</div>
+            <div class="how-step__desc">Preencha os seus dados e confirme o agendamento</div>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Testimonials -->
+    <section class="section testimonials" aria-label="Depoimentos">
+      <div class="container">
+        <h2 class="section__title">O Que Dizem as Nossas Clientes</h2>
+        <div class="testimonials__grid">
+          <div class="testimonial">
+            <div class="testimonial__stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial__text">"Adorei a experiência! A profissional foi pontual e o resultado ficou incrível. Já sou cliente assídua."</p>
+            <div class="testimonial__author">— Maria S., Lisboa</div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial__stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial__text">"O processo de marcação é tão fácil! Nem preciso de ligar. Recomendo a todos."</p>
+            <div class="testimonial__author">— Ana P., Porto</div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial__stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <p class="testimonial__text">"Ambiente acolhedor, profissionais excelentes e o sistema de marcação online é muito prático."</p>
+            <div class="testimonial__author">— Carla M., Braga</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" aria-label="Marca já">
+      <div class="container">
+        <h2 class="cta-section__title">Pronta para Brilhar?</h2>
+        <p class="cta-section__subtitle">Agende o seu tratamento hoje e sinta-se especial</p>
+        <a href="/marcacao" class="cta-section__button">
+          <i class="fas fa-arrow-right"></i> Marcar agora
+        </a>
+      </div>
+    </section>
+
     <!-- Contact Info -->
-    <section class="section" aria-label="Contactos">
-      <h2 class="section__title">Contactos</h2>
-      <div class="contact-grid" id="contact-grid">
-        <!-- Loaded from API -->
+    <section class="section contact-section" aria-label="Contactos">
+      <div class="container">
+        <h2 class="section__title">Contactos</h2>
+        <div class="contact-grid" id="contact-grid">
+          <div class="contact-item">
+            <div class="contact-item__icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <div class="contact-item__label">Localização</div>
+              <div class="contact-item__value">Rua Exemplo, 123</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item__icon"><i class="fas fa-phone"></i></div>
+            <div>
+              <div class="contact-item__label">Telefone</div>
+              <div class="contact-item__value">+351 912 345 678</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item__icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <div class="contact-item__label">Email</div>
+              <div class="contact-item__value">admin@nailbook.pt</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item__icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <div class="contact-item__label">Horário</div>
+              <div class="contact-item__value">Seg-Sex: 9h-19h</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer style="background: var(--color-primary); color: white; text-align: center; padding: var(--space-xl);">
-    <p style="margin-bottom: var(--space-sm);">NailBook — Todos os direitos reservados</p>
-    <p style="font-size: var(--font-size-sm); opacity: 0.8;">
-      <a href="/privacidade" style="color: white;">Política de Privacidade</a> |
-      <a href="/termos" style="color: white;">Termos de Utilização</a>
-    </p>
+  <footer class="footer" role="contentinfo">
+    <div class="footer__content">
+      <div class="footer__brand">
+        <i class="fas fa-spa"></i> NailBook
+      </div>
+      <p class="footer__text">Tecnologia ao serviço da beleza. Marque já o seu próximo tratamento.</p>
+      <div class="footer__socials">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="footer__links">
+        <a href="/privacidade">Política de Privacidade</a>
+        <a href="/termos">Termos de Utilização</a>
+      </div>
+      <p class="footer__copyright">© 2026 NailBook. Todos os direitos reservados.</p>
+    </div>
   </footer>
 
   <script type="module" src="js/public.js"></script>
   <script type="module">
-    import { initHomepage } from './js/booking.js';
+    import { initHomepage } from './js/public.js';
     document.addEventListener('DOMContentLoaded', () => initHomepage());
   </script>
 </body>

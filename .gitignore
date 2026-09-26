@@ -79,8 +79,5 @@ update_*.cjs
 *.pfx
 *.cert
 
-# Render
-render.yaml
-
 # Temporary
 tmp/

@@ -109,7 +109,7 @@ async function loadContactInfo() {
       </div>
     `;
   } catch {
-    grid.innerHTML = '';
+    // Manter conteúdo estático se a API falhar
   }
 }
 
