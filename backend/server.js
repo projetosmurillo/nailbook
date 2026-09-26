@@ -15,7 +15,7 @@ import { join } from 'path';
 
 import { pool } from './config/database.js';
 import { AdminUser } from './models/index.js';
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { router as apiRouter } from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { generalLimiter as rateLimiter } from './middleware/rateLimiter.js';
@@ -125,6 +125,12 @@ app.use(errorHandler);
 // ENSURE ADMIN USER
 // ============================================
 
+const SALT_SECRET = 'nailbook-secret-key';
+
+function hashPassword(password) {
+  return crypto.createHmac('sha256', SALT_SECRET).update(password).digest('hex');
+}
+
 async function ensureAdmin() {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@nailbook.pt';
   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || 'PasswordSegura123!';
@@ -133,17 +139,13 @@ async function ensureAdmin() {
   try {
     const existing = await AdminUser.findByEmail(adminEmail);
     if (!existing) {
-      let hash;
-      try {
-        hash = await bcrypt.hash(adminPassword, 12);
-      } catch (bcryptErr) {
-        logger.error('bcrypt.hash failed:', bcryptErr.message || bcryptErr);
-        throw bcryptErr;
-      }
+      const hash = hashPassword(adminPassword);
       await AdminUser.create({ email: adminEmail, passwordHash: hash, name: adminName, role: 'admin' });
       logger.info(`Default admin created: ${adminEmail}`);
     } else {
-      logger.info(`Admin already exists: ${adminEmail}`);
+      const hash = hashPassword(adminPassword);
+      await AdminUser.updatePassword(adminEmail, hash);
+      logger.info(`Admin password reset: ${adminEmail}`);
     }
   } catch (err) {
     logger.warn('Could not ensure admin user:', err.message || err);

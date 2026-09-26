@@ -7,7 +7,7 @@
 
 import { pool } from '../config/database.js';
 import { v4 as uuid } from 'uuid';
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 
 // ============================================
 // UTILIDADES DE CONVENIÊNCIA
@@ -21,18 +21,24 @@ function toPgTimestamp(date) {
   return date instanceof Date ? date.toISOString() : new Date(date).toISOString();
 }
 
+const SALT_SECRET = 'nailbook-secret-key';
+
+function hashPassword(password) {
+  return crypto.createHmac('sha256', SALT_SECRET).update(password).digest('hex');
+}
+
 /**
  * Hash um token para armazenamento seguro
  */
 async function hashToken(token) {
-  return bcrypt.hash(token, 12);
+  return hashPassword(token);
 }
 
 /**
  * Verificar se um token corresponde ao hash
  */
 async function verifyToken(token, tokenHash) {
-  return bcrypt.compare(token, tokenHash);
+  return hashPassword(token) === tokenHash;
 }
 
 // ============================================
@@ -95,6 +101,16 @@ export const AdminUser = {
       [active, toPgTimestamp(now()), id]
     );
     return result.rows[0] || null;
+  },
+
+  /**
+   * Atualizar password
+   */
+  async updatePassword(email, passwordHash) {
+    await pool.query(
+      'UPDATE admin_users SET password_hash = $1, updated_at = $2 WHERE email = $3',
+      [passwordHash, toPgTimestamp(now()), email]
+    );
   }
 };
 

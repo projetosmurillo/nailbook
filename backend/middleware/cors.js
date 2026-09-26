@@ -12,6 +12,14 @@ const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
   : [];
 
+// Adicionar URL do Render como origem permitida em produção
+if (process.env.NODE_ENV === 'production') {
+  const renderUrl = process.env.API_URL || 'https://nailbook-api.onrender.com';
+  if (!allowedOrigins.includes(renderUrl)) {
+    allowedOrigins.push(renderUrl);
+  }
+}
+
 if (process.env.NODE_ENV === 'production' && allowedOrigins.length === 0) {
   logger.error('CORS_ORIGIN is not configured in production. Set CORS_ORIGIN environment variable.');
   process.exit(1);
@@ -19,13 +27,9 @@ if (process.env.NODE_ENV === 'production' && allowedOrigins.length === 0) {
 
 export const corsMiddleware = cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin ONLY in development
+    // Allow requests with no origin (direct URL access in browser)
     if (!origin) {
-      if (process.env.NODE_ENV === 'development') {
-        return callback(null, true);
-      }
-      // In production, reject requests without origin
-      return callback(new Error('CORS: Origin not allowed'));
+      return callback(null, true);
     }
 
     if (allowedOrigins.includes(origin)) {

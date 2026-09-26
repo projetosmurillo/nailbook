@@ -3,7 +3,7 @@
  */
 
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { AdminUser } from '../models/index.js';
 import { Appointment } from '../models/index.js';
 import { Customer } from '../models/index.js';
@@ -24,11 +24,9 @@ import { pool } from '../config/database.js';
 async function adminLogin(req, res, next) {
   try {
     const { email, password } = req.body;
-    console.log('Login attempt:', email, '|| pw:', password ? 'yes' : 'no');
 
     // 1. Procurar utilizador
     const admin = await AdminUser.findByEmail(email);
-    console.log('Admin found:', !!admin, '|| active:', admin?.active);
     if (!admin) {
       return res.status(401).json({ error: 'Email ou password inválidos' });
     }
@@ -37,9 +35,9 @@ async function adminLogin(req, res, next) {
       return res.status(403).json({ error: 'Conta desativada' });
     }
 
-    // 2. Verificar password
-    const validPassword = await bcrypt.compare(password, admin.password_hash);
-    console.log('Password valid:', validPassword);
+    const SALT_SECRET = 'nailbook-secret-key';
+    const inputHash = crypto.createHmac('sha256', SALT_SECRET).update(password).digest('hex');
+    const validPassword = inputHash === admin.password_hash;
     if (!validPassword) {
       return res.status(401).json({ error: 'Email ou password inválidos' });
     }
